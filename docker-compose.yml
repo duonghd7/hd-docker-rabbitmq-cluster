@@ -1,0 +1,68 @@
+version: "3.8.23"
+# command: docker-compose -f docker-compose.yml up
+
+services:
+  rabbitmq-node-1:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq-node-1
+    hostname: rabbitmq-node-1
+    ports:
+      - "15672:15672"
+    networks:
+      - cluster-network
+    volumes:
+      - ./node-1/lib:/var/lib/rabbitmq
+      - ./node-1/log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}  
+
+  rabbitmq-node-2:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq-node-2
+    hostname: rabbitmq-node-2
+    ports:
+      - "15673:15672"
+    networks:
+      - cluster-network
+    volumes:
+      - ./node-2/lib:/var/lib/rabbitmq
+      - ./node-2/log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}  
+
+  rabbitmq-node-3:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq-node-3
+    hostname: rabbitmq-node-3
+    ports:
+      - "15674:15672"
+    networks:
+      - cluster-network
+    volumes:
+      - ./node-3/lib:/var/lib/rabbitmq
+      - ./node-3/log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}  
+
+  haproxy:
+    image: haproxy-server:latest
+    container_name: haproxy
+    hostname: haproxy
+    ports:
+      - "5672:5672"
+      - "1936:1936"
+    networks:
+      - cluster-network
+
+networks:
+  cluster-network:
+    driver: bridge

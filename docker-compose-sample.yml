@@ -1,0 +1,27 @@
+version: "3.8.23"
+# command: docker-compose -f docker-compose.yml up
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    hostname: rabbitmq-node-1
+    restart: "no"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}  
+    volumes:
+      - ./node-1/lib:/var/lib/rabbitmq
+      - ./node-1/log:/var/log/rabbitmq
+    networks:
+      - rabbitmq_go_net
+      
+networks:
+  rabbitmq_go_net:
+    driver: bridge
+    
