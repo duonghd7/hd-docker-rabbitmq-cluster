@@ -1,3 +1,5 @@
+### RabbitMQ cluster with HAProxy and Docker Compose
+
 ![image](https://user-images.githubusercontent.com/18477507/153174563-ab03b29d-097d-45a1-90ec-539b0e74f997.png)
 
 1. Create file<br>
@@ -32,3 +34,5 @@
           
         docker exec -ti rabbitmq-node-3 bash -c "rabbitmqctl start_app"
   
+
+Access HAProxy statistics report at http://localhost:1936/haproxy?stats with the credential <haproxy:haproxy>, and the RabbitMQ console at http://localhost:15672/ with the credential <root:1234567>.
